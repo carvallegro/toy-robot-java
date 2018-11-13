@@ -1,4 +1,4 @@
-package com.carvallegro.toyrobot;
+package com.carvallegro.toyrobot.logic;
 
 import org.junit.jupiter.api.Test;
 
@@ -56,5 +56,42 @@ class DirectionTest {
 
         // Then
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void find_should_return_the_correct_command() {
+        // Given
+        String command = "NORTH";
+        Direction expected = Direction.NORTH;
+
+        // When
+        Direction actual = Direction.find(command);
+
+        // Then
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void find_should_return_null_when_string_is_empty() {
+        // Given
+        String command = "";
+
+        // When
+        Direction actual = Direction.find(command);
+
+        // Then
+        assertNull(actual);
+    }
+
+    @Test
+    void find_should_return_null_when_command_is_unknown() {
+        // Given
+        String command = "not a command";
+
+        // When
+        Direction actual = Direction.find(command);
+
+        // Then
+        assertNull(actual);
     }
 }

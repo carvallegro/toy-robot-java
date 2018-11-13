@@ -22,7 +22,7 @@ jobs:
   include:
     - stage: test
       script: ./gradlew test
-      script: ./gradlew jacocoTestReport
+    - script: ./gradlew jacocoTestReport
     - script: codecov
 
 stages:

@@ -5,9 +5,21 @@ public enum Command {
     MOVE,
     LEFT,
     RIGHT,
-    REPORT;
+    REPORT,
+    UNKNOWN;
 
     public static Command find(String command){
+        if(command == null || command.isBlank()){
+            return UNKNOWN;
+        }
 
+        String sanitizedCommand = command.toUpperCase();
+        for (Command c: Command.values()) {
+            if(c.name().equals(sanitizedCommand)){
+                return c;
+            }
+        }
+
+        return UNKNOWN;
     }
 }

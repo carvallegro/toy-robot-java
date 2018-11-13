@@ -3,16 +3,12 @@ sudo: disabled
 jdk:
   - oraclejdk11
 
-env:
-  global:
-    - CODECOV_TOKEN=:uuid-repo-token
-
 branches:
   only:
   - master
 
-before_install:
-  - pip install --user codecov
+#before_install:
+#  - pip install --user codecov
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -22,12 +18,15 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-jobs:
-  include:
-    - stage: test
-      script: ./gradlew test
-    - script: ./gradlew jacocoTestReport
-    - script: codecov
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  
+#jobs:
+#  include:
+#    - stage: test
+#      script: ./gradlew test
+#    - script: ./gradlew jacocoTestReport
+#    - script: codecov
 
-stages:
-  - test
+# stages:
+#  - test

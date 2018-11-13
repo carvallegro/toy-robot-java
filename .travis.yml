@@ -7,6 +7,10 @@ env:
   global:
     - CODECOV_TOKEN=:uuid-repo-token
 
+branches:
+  only:
+  - master
+
 before_install:
   - pip install --user codecov
 

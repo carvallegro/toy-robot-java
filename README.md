@@ -1,4 +1,9 @@
 # Toy Robot Coding Exercise
+
+[![Build Status](https://travis-ci.com/carvallegro/toy-robot-java.svg?branch=master)](https://travis-ci.com/carvallegro/toy-robot-java)
+[![codecov](https://codecov.io/gh/carvallegro/toy-robot-java/branch/master/graph/badge.svg)](https://codecov.io/gh/carvallegro/toy-robot-java)
+[![CodeFactor](https://www.codefactor.io/repository/github/carvallegro/toy-robot-java/badge)](https://www.codefactor.io/repository/github/carvallegro/toy-robot-java)
+
 > See [Problem Statement](./PROBLEM.md)
 
 ## Run

@@ -1,0 +1,29 @@
+language: java
+sudo: disabled
+jdk:
+  - oraclejdk11
+
+env:
+  global:
+    - CODECOV_TOKEN=:uuid-repo-token
+
+before_install:
+  - pip install --user codecov
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+jobs:
+  include:
+    - stage: test
+      script: ./gradlew test
+    - script: ./gradlew jacocoTestReport
+    - script: codecov
+
+stages:
+  - test

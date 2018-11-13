@@ -1,20 +1,45 @@
 plugins {
     id 'java'
+    id 'idea'
 }
 
 group 'toy-robot'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+apply plugin: 'jacoco'
+
+sourceCompatibility = 1.11
 
 repositories {
+    mavenLocal()
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '5.1.1'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testCompile 'org.junit.jupiter:junit-jupiter-params:5.3.1'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
 test {
     useJUnitPlatform()
 }
+
+wrapper {
+    gradleVersion = '4.8'
+}
+
+jacoco {
+    toolVersion = '0.8.2'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+
+check.dependsOn jacocoTestReport

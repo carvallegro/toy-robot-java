@@ -1,4 +1,4 @@
-package com.carvallegro.toyrobot;
+package com.carvallegro.toyrobot.logic;
 
 public class Grid {
     private static final String ROBOT_NOT_PLACED_ERROR_MESSAGE = "Robot hasn't been placed";

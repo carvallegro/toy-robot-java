@@ -6,10 +6,7 @@ jdk:
 branches:
   only:
   - master
-
-#before_install:
-#  - pip install --user codecov
-
+  
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -20,13 +17,3 @@ cache:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  
-#jobs:
-#  include:
-#    - stage: test
-#      script: ./gradlew test
-#    - script: ./gradlew jacocoTestReport
-#    - script: codecov
-
-# stages:
-#  - test

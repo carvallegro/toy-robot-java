@@ -1,4 +1,4 @@
-package com.carvallegro.toyrobot;
+package com.carvallegro.toyrobot.logic;
 
 public class Robot {
     private Direction direction;

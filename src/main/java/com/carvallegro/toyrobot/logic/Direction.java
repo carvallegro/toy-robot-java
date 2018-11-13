@@ -1,4 +1,6 @@
-package com.carvallegro.toyrobot;
+package com.carvallegro.toyrobot.logic;
+
+import com.carvallegro.toyrobot.cli.Command;
 
 public enum Direction {
     NORTH(new Coordinates(0, 1)),
@@ -42,5 +44,20 @@ public enum Direction {
         int newX = coordinates.getX() + 1 * lambda.getX();
         int newY = coordinates.getY() + 1 * lambda.getY();
         return new Coordinates(newX, newY);
+    }
+
+    public static Direction find(String stringDirection) {
+        if (stringDirection == null || stringDirection.isBlank()) {
+            return null;
+        }
+
+        String sanitizedCommand = stringDirection.toUpperCase();
+        for (Direction direction : Direction.values()) {
+            if (direction.name().equals(sanitizedCommand)) {
+                return direction;
+            }
+        }
+
+        return null;
     }
 }

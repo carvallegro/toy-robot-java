@@ -1,5 +1,8 @@
-package com.carvallegro.toyrobot;
+package com.carvallegro.toyrobot.logic;
 
+import com.carvallegro.toyrobot.logic.Coordinates;
+import com.carvallegro.toyrobot.logic.Direction;
+import com.carvallegro.toyrobot.logic.Grid;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

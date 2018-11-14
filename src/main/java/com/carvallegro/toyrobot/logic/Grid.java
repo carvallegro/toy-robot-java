@@ -85,7 +85,7 @@ public class Grid {
 
     public String report(){
         if(!isRobotPlaced()){
-            throw new IllegalStateException(ROBOT_NOT_PLACED_ERROR_MESSAGE);
+            return ROBOT_NOT_PLACED_ERROR_MESSAGE;
         }
 
         return robot.toString();

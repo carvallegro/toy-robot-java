@@ -4,22 +4,26 @@ import com.carvallegro.toyrobot.logic.Coordinates;
 import com.carvallegro.toyrobot.logic.Direction;
 import com.carvallegro.toyrobot.logic.Grid;
 
-public class TextInterface {
-    public static final String COMMAND_UNKNOWN = "Command unknown";
-    public static final String INVALID_PLACE_PARAMETERS = "The PLACE command must have three parameters: X,Y,DIRECTION";
-    public static final String INVALID_COORDINATES_PARAMETERS = "Coordinates must be integers";
-    public static final int DIRECTION_POSITION = 2;
-    public static final int X_POSITION = 0;
-    public static final int Y_POSITION = 1;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
-    private Grid grid;
+public class TextInterface {
+    private static final String INVALID_PLACE_PARAMETERS = "The PLACE command must have three parameters: X,Y,DIRECTION";
+    private static final String INVALID_COORDINATES_PARAMETERS = "Coordinates must be integers";
+    private static final int DIRECTION_POSITION = 2;
+    private static final int X_POSITION = 0;
+    private static final int Y_POSITION = 1;
+
+    private final Grid grid;
 
     public TextInterface() {
         grid = new Grid();
     }
 
-    public String command(String stringCommand, String[] params) {
-        Command command = Command.find(stringCommand);
+    public void runCommand(String commandAsString, String[] params) {
+        Command command = Command.find(commandAsString);
         switch (command) {
             case PLACE:
                 callPlace(params);
@@ -34,25 +38,24 @@ public class TextInterface {
                 grid.right();
                 break;
             case REPORT:
-                return grid.report();
+                displayMessage(grid.report());
+                break;
             case UNKNOWN:
             default:
-                return COMMAND_UNKNOWN;
+                break;
         }
-
-        return null;
     }
 
-    private void callPlace(String[] params) {
-        if (params == null) {
+    private void callPlace(String[] locationParams) {
+        if (locationParams == null) {
             throw new IllegalArgumentException(INVALID_PLACE_PARAMETERS);
         }
-        if (params.length != 3) {
+        if (locationParams.length != 3) {
             throw new IllegalArgumentException(INVALID_PLACE_PARAMETERS);
         }
 
-        Coordinates coordinates = getCoordinatesFromParams(params);
-        Direction direction = Direction.find(params[DIRECTION_POSITION]);
+        Coordinates coordinates = getCoordinatesFromParams(locationParams);
+        Direction direction = Direction.find(locationParams[DIRECTION_POSITION]);
         grid.place(coordinates, direction);
     }
 
@@ -68,7 +71,53 @@ public class TextInterface {
         return new Coordinates(x, y);
     }
 
+
     public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("One argument expected: path to the input file.");
+            return;
+        }
+
+        List<String> inputLines = getLinesFromFiles(args);
+        if (inputLines == null) {
+            System.out.println("File not found");
+            return;
+        }
+
         TextInterface textInterface = new TextInterface();
+        for (String line : inputLines) {
+            String[] lineAsArray = line.trim().split(" ");
+
+            String command = lineAsArray[0];
+
+            String[] params = getCommandParams(lineAsArray);
+            try {
+                textInterface.runCommand(command, params);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+
+    private static String[] getCommandParams(String[] lineAsArray) {
+        if (lineAsArray.length < 2) {
+            return null;
+        }
+
+        return lineAsArray[1].split(",");
+    }
+
+    private static List<String> getLinesFromFiles(String[] args) {
+        try {
+            return Files.readAllLines(Path.of(args[0]));
+        } catch (IOException e) {
+            System.err.println("Trying to find file: " + args[0]);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static void displayMessage(String message) {
+        System.out.println(message);
     }
 }

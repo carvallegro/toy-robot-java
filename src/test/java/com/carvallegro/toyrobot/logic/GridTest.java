@@ -1,11 +1,9 @@
 package com.carvallegro.toyrobot.logic;
 
-import com.carvallegro.toyrobot.logic.Coordinates;
-import com.carvallegro.toyrobot.logic.Direction;
-import com.carvallegro.toyrobot.logic.Grid;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class GridTest {
 
@@ -278,15 +276,15 @@ class GridTest {
 
 
     @Test
-    void report_should_throw_IllegalStateException_if_robot_has_not_been_placed() {
+    void report_should_return_message_if_robot_has_not_been_placed() {
         // Given
         Grid grid = new Grid();
 
         // When
-        Throwable exception = assertThrows(IllegalStateException.class, () -> grid.report());
+        String actual = grid.report();
 
         // Then
-        assertEquals("Robot hasn't been placed", exception.getMessage());
+        assertEquals("Robot hasn't been placed", actual);
     }
 
     @Test

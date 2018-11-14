@@ -1,133 +1,138 @@
 package com.carvallegro.toyrobot.cli;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TextInterfaceTest {
 
-    @Test
-    void command_returns_message_when_command_is_unknown() {
-        // Given
-        TextInterface textInterface = new TextInterface();
-        String command = "random";
-        String expected = "Command unknown";
+    private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private static final PrintStream originalOut = System.out;
 
-        // When
-        String actual = textInterface.command(command, null);
+    private TextInterface textInterface;
 
-        // Then
-        assertEquals(expected, actual);
+    @BeforeEach
+    public void beforeEach() {
+        textInterface = new TextInterface();
+    }
+
+    @BeforeAll
+    public static void setUp() {
+        System.setOut(new PrintStream(outContent));
+    }
+
+    @AfterAll
+    public static void restore() {
+        System.setOut(originalOut);
     }
 
     @Test
-    void command_throw_exception_when_robot_have_not_been_placed() {
+    void runCommand_throw_exception_when_robot_have_not_been_placed() {
         // Given
-        TextInterface textInterface = new TextInterface();
         String command = "move";
 
         // When
-        Throwable exception = assertThrows(IllegalStateException.class, () -> textInterface.command(command, null));
+        Throwable exception = assertThrows(IllegalStateException.class, () -> textInterface.runCommand(command, null));
 
         // Then
         assertEquals("Robot hasn't been placed", exception.getMessage());
     }
 
     @Test
-    void command_throw_exception_when_PLACE_has_null_arguments() {
+    void runCommand_throw_exception_when_PLACE_has_null_arguments() {
         // Given
-        TextInterface textInterface = new TextInterface();
         String command = "place";
 
         // When
-        Throwable exception = assertThrows(IllegalArgumentException.class, () -> textInterface.command(command, null));
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> textInterface.runCommand(command, null));
 
         // Then
         assertEquals("The PLACE command must have three parameters: X,Y,DIRECTION", exception.getMessage());
     }
 
     @Test
-    void command_throw_exception_when_PLACE_has_invalid_number_of_arguments() {
+    void runCommand_throw_exception_when_PLACE_has_invalid_number_of_arguments() {
         // Given
-        TextInterface textInterface = new TextInterface();
         String command = "place";
         String[] params = new String[]{"a", "b"};
 
         // When
-        Throwable exception = assertThrows(IllegalArgumentException.class, () -> textInterface.command(command, params));
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> textInterface.runCommand(command, params));
 
         // Then
         assertEquals("The PLACE command must have three parameters: X,Y,DIRECTION", exception.getMessage());
     }
 
     @Test
-    void command_throw_exception_when_PLACE_has_invalid_coordinate_params() {
+    void runCommand_throw_exception_when_PLACE_has_invalid_coordinate_params() {
         // Given
-        TextInterface textInterface = new TextInterface();
         String command = "place";
         String[] params = new String[]{"a", "b", "c"};
 
         // When
-        Throwable exception = assertThrows(IllegalArgumentException.class, () -> textInterface.command(command, params));
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> textInterface.runCommand(command, params));
 
         // Then
         assertEquals("Coordinates must be integers", exception.getMessage());
     }
 
     @Test
-    void command_REPORT_should_give_robot_state() {
+    void runCommand_REPORT_should_print_robot_state() {
         // Given
-        TextInterface textInterface = new TextInterface();
         String[] params = new String[]{"0", "0", "NORTH"};
         String expected = "0,0,NORTH";
 
         // When
-        textInterface.command(Command.PLACE.name(), params);
-        String actual = textInterface.command(Command.REPORT.name(), null);
+        textInterface.runCommand(Command.PLACE.name(), params);
+        textInterface.runCommand(Command.REPORT.name(), null);
+        String actual = outContent.toString();
 
         // Then
-        assertEquals(expected, actual);
+        assertEquals(actual.trim(), expected);
     }
 
     @Test
-    void command_LEFT_should_return_null() {
+    void runCommand_LEFT_should_print_nothing() {
         // Given
-        TextInterface textInterface = new TextInterface();
         String[] params = new String[]{"0", "0", "NORTH"};
 
         // When
-        textInterface.command(Command.PLACE.name(), params);
-        String actual = textInterface.command(Command.LEFT.name(), null);
+        textInterface.runCommand(Command.PLACE.name(), params);
+        textInterface.runCommand(Command.LEFT.name(), null);
 
         // Then
-        assertNull(actual);
+        assertEquals("", outContent.toString());
     }
 
     @Test
-    void command_RIGHT_should_return_null() {
+    void runCommand_RIGHT_should_print_nothing() {
         // Given
-        TextInterface textInterface = new TextInterface();
         String[] params = new String[]{"0", "0", "NORTH"};
 
         // When
-        textInterface.command(Command.PLACE.name(), params);
-        String actual = textInterface.command(Command.RIGHT.name(), null);
+        textInterface.runCommand(Command.PLACE.name(), params);
+        textInterface.runCommand(Command.RIGHT.name(), null);
 
         // Then
-        assertNull(actual);
+        assertEquals("", outContent.toString());
     }
 
     @Test
-    void command_MOVE_should_return_null() {
+    void runCommand_MOVE_should_print_nothing() {
         // Given
-        TextInterface textInterface = new TextInterface();
         String[] params = new String[]{"0", "0", "NORTH"};
 
         // When
-        textInterface.command(Command.PLACE.name(), params);
-        String actual = textInterface.command(Command.LEFT.name(), null);
+        textInterface.runCommand(Command.PLACE.name(), params);
+        textInterface.runCommand(Command.MOVE.name(), null);
 
         // Then
-        assertNull(actual);
+        assertEquals("", outContent.toString());
     }
 }

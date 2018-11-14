@@ -1,14 +1,12 @@
 package com.carvallegro.toyrobot.logic;
 
-import com.carvallegro.toyrobot.cli.Command;
-
 public enum Direction {
     NORTH(new Coordinates(0, 1)),
     EAST(new Coordinates(1, 0)),
     SOUTH(new Coordinates(0, -1)),
     WEST(new Coordinates(-1, 0));
 
-    private final Coordinates lambda;
+    private final Coordinates delta;
 
     private Direction left;
 
@@ -28,8 +26,8 @@ public enum Direction {
         WEST.right = NORTH;
     }
 
-    Direction(Coordinates lambda) {
-        this.lambda = lambda;
+    Direction(Coordinates delta) {
+        this.delta = delta;
     }
 
     public Direction left() {
@@ -41,8 +39,8 @@ public enum Direction {
     }
 
     public Coordinates moveTowards(Coordinates coordinates) {
-        int newX = coordinates.getX() + 1 * lambda.getX();
-        int newY = coordinates.getY() + 1 * lambda.getY();
+        int newX = coordinates.getX() + 1 * delta.getX();
+        int newY = coordinates.getY() + 1 * delta.getY();
         return new Coordinates(newX, newY);
     }
 
